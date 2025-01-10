@@ -34,10 +34,15 @@ Clear-Host
 $ProgressPreference = 'SilentlyContinue'
 
 function Show-Menu {
-    Clear-Host
-    Write-Host "|Toggle Menu|"
-    Write-Host " -----------"
-    Write-Host "1. Windows Updates"
+    $titleColor = "Cyan"
+    $borderColor = "Yellow"
+    $fgColor = "White"
+    Write-Host ("="*40) -ForegroundColor $borderColor
+    Write-Host "|             Toggle Menu              |" -ForegroundColor $titleColor
+    Write-Host ("="*40) -ForegroundColor $borderColor
+    Write-Host ""
+
+    Write-Host "1. Windows Updates" 
     Write-Host "2. Create Temp + Visitor_Pic Folders (with permissions)"
     Write-Host "3. Microsoft Edge Registry Patch"
     Write-Host "4. API (silent)" 
