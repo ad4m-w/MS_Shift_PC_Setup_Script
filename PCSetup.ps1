@@ -1,5 +1,5 @@
 # Created By Adam Waszczyszak
-# Version 1.0
+# Version 1.1
 # Lightweight, simple version to enable compatiblity on all systems
 
 $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak"
@@ -54,6 +54,7 @@ function Show-Menu {
     Write-Host "15. Disable Windows Updates"
     Write-Host "16. Delete Temp Files"
     Write-Host "17. Edit Email Signature"
+    Write-Host "18. Full Package."
     Write-Host "Q. Quit"
 }
 
@@ -76,6 +77,7 @@ $blockAdobe = $false
 $blockWindows = $false
 $deleteTemp = $false
 $editSignature = $false
+$fullPackage = $false
 
 do {
 
@@ -241,27 +243,17 @@ do {
             
         }  
         "16" {
-            if($silentAdobe -eq $false){
-                $silentAdobe = $true
+            if($deleteTemp -eq $false){
+                $deleteTemp = $true
                 Write-Host "Silent Install of Adobe  Enabled"                
             }
-            elseif($silentAdobe -eq $true){
-                $silentAdobe = $false
+            elseif($deleteTemp -eq $true){
+                $deleteTemp = $false
                 Write-Host "Silent Install of Adobe  Disabled"                
             }
             
         }      
         "17" {
-            if($deleteTemp -eq $false){
-                $deleteTemp = $true
-                Write-Host "Delete Temp  Enabled"                
-            }
-            elseif($deleteTemp -eq $true){
-                $deleteTemp = $false
-                Write-Host "Delete Temp  Disabled"                
-            }           
-        }
-        "18" {
             if($editSignature -eq $false){
                 $editSignature = $true
                 Write-Host "Edit Email Signature  Enabled"                
@@ -269,6 +261,16 @@ do {
             elseif($editSignature -eq $true){
                 $editSignature = $false
                 Write-Host "Edit Email Signature  Disabled"                
+            }           
+        }
+        "18" {
+            if($fullPackage -eq $false){
+                $fullPackage = $true
+                Write-Host "Full Package  Enabled"                
+            }
+            elseif($fullPackage -eq $true){
+                $fullPackage = $false
+                Write-Host "Full Package  Disabled"                
             }
         }
 
@@ -283,13 +285,33 @@ do {
     Write-Host ""
 } while ($choice -ne "Q")
 
+if($fullPackage -eq $true){
+    $windowsUpdate = $true
+    $createFolders = $true
+    $msedgePatch = $true
+    $silentAPI = $true
+    $silentAdobe = $true
+    $silentScanner = $true
+    $silentDymo = $true
+    $signaturepad = $true
+    $lx500 = $true
+    $gk420d = $true
+    $zd421 = $true
+    $zxp = $true
+    $blockDymo = $true
+    $blockAdobe = $true
+    $blockWindows = $true
+    $deleteTemp = $true
+    $editSignature = $true
+}
+
 if($windowsUpdate -eq $true){
 
-    'Installing Windows Update PS ...'
-    Install- -Name NuGet -Force
-    Install- -Name PSWindowsUpdate -Force
+    'Installing Windows Update PS Module...'
+    Install-Module -Name NuGet -Force
+    Install-Module -Name PSWindowsUpdate -Force
     'Installing all newest Windows Updates'
-    Import- -Name PSWindowsUpdate -Force
+    Import-Module -Name PSWindowsUpdate -Force
     Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot -Verbose
     'Done, remember to restart later!'
 }
