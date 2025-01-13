@@ -1,5 +1,5 @@
 # Created By Adam Waszczyszak
-# Version 1.2
+# Version 1.4
 # Lightweight, simple version of the setup script to enable compatiblity on all systems
 
 $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak"
@@ -52,15 +52,15 @@ function Show-Menu {
     Write-Host "8. Signature Pad"
     Write-Host "9. LX-500 (must be plugged in)"
     Write-Host "10. GK420D"
-    Write-Host "11. ZD421"
+    Write-Host "11. ZD-421"
     Write-Host "12. ZXP-7"
     Write-Host "13. Block DYMO Updates"
     Write-Host "14. Block Adobe Updates"
     Write-Host "15. Disable Windows Updates"
     Write-Host "16. Delete Temp Files"
     Write-Host "17. Edit Email Signature"
-    Write-Host "18. Full Package."
-    Write-Host "Q. Quit"
+    Write-Host "18. Full Package"
+    Write-Host "Q. Execute selection and Quit"
 }
 
 Show-Menu
@@ -664,20 +664,33 @@ if($deleteTemp -eq $true){
 }
 if($editSignature -eq $true){
     $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 100%"
-    'Make sure that the new signature is created as their FIRST name.'   
+    # Make sure that the new signature is created as their FIRST name.
     # Get new user's first name, last name
     $newFirst = Read-Host "New User's first name"
     $newLast = Read-Host "New User's last name"
-    'Parsing HTM file...'
-    # Parse HTM file
-    $lines = Get-Content "C:\Users\$newFirst$newLast\AppData\Roaming\Microsoft\Signatures\$newFirst ($newFirst.$newLast@msshift-usa.com).htm"
-
-    # Modify the line at index 809 (Line 810) with the correct HTML image tag
-    $lines[809] = "    src='https://download.msshift.com/MS_EMAIL_RES/$newFirst$newLast/$newFirst$newLast.png' /><o:p></o:p></span></p>"
-
-    # Write the modified array back to the file
-    Set-Content "C:\Users\$newFirst$newLast\AppData\Roaming\Microsoft\Signatures\$newFirst ($newFirst.$newLast@msshift-usa.com).htm" $lines
-    'New line written and saved!'
+    
+    # Define the file path to the signature HTML file
+    $filePath = "C:\Users\$newFirst$newLast\AppData\Roaming\Microsoft\Signatures\$newFirst ($newFirst.$newLast@msshift-usa.com).htm"
+    
+    # Read the file content into an array of lines
+    $lines = Get-Content $filePath
+    
+    # Define the regular expression to match the src URL pattern
+    $pattern = '(?<=MS_EMAIL_RES/)(.*?)(?=\.png)'
+    
+    # Loop through the lines and replace the part of the URL between MS_EMAIL_RES/ and .png
+    for ($i = 0; $i -lt $lines.Length; $i++) {
+        if ($lines[$i] -match $pattern) {
+            # Replace the template full name with the new one
+            $newImageName = "$newFirst$newLast/$newFirst$newLast"
+            $lines[$i] = $lines[$i] -replace $pattern, $newImageName
+        }
+    }
+    
+    # Write the modified content back to the file
+    Set-Content $filePath $lines
+    
+    'New line written and saved!'    
 }
 $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 100%"
 'Script Finished. Goodbye!'
