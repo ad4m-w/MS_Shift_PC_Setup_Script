@@ -1,5 +1,5 @@
 # Created By Adam Waszczyszak
-# Version 1.4
+# Version 1.5
 # Lightweight, simple version of the setup script to enable compatiblity on all systems
 
 $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak"
@@ -36,7 +36,6 @@ $ProgressPreference = 'SilentlyContinue'
 function Show-Menu {
     $titleColor = "Cyan"
     $borderColor = "Yellow"
-    $fgColor = "White"
     Write-Host ("="*40) -ForegroundColor $borderColor
     Write-Host "|             Toggle Menu              |" -ForegroundColor $titleColor
     Write-Host ("="*40) -ForegroundColor $borderColor
@@ -59,7 +58,8 @@ function Show-Menu {
     Write-Host "15. Disable Windows Updates"
     Write-Host "16. Delete Temp Files"
     Write-Host "17. Edit Email Signature"
-    Write-Host "18. Full Package"
+    Write-Host "18. Success Bookmarks"
+    Write-Host "19. Full Package"
     Write-Host "Q. Execute selection and Quit"
 }
 
@@ -84,6 +84,7 @@ $blockWindows = $false
 $deleteTemp = $false
 $editSignature = $false
 $fullPackage = $false
+$successBookmarks = $false
 
 do {
 
@@ -270,6 +271,16 @@ do {
             }           
         }
         "18" {
+            if($successBookmarks -eq $false){
+                $successBookmarks = $true
+                Write-Host "Success Bookmarks  Enabled"                
+            }
+            elseif($successBookmarks -eq $true){
+                $successBookmarks = $false
+                Write-Host "Success Bookmarks  Disabled"                
+            }
+        }        
+        "19" {
             if($fullPackage -eq $false){
                 $fullPackage = $true
                 Write-Host "Full Package  Enabled"                
@@ -309,6 +320,7 @@ if($fullPackage -eq $true){
     $blockWindows = $true
     $deleteTemp = $true
     $editSignature = $true
+    $successBookmarks =$true
 }
 
 if($windowsUpdate -eq $true){
@@ -587,83 +599,13 @@ if($blockWindows -eq $true){
 if($deleteTemp -eq $true){
     $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 94.08%"
     'Removing all drivers from Temp Folder...'
-    if(Test-Path "C:\Temp\api.zip" ){
-         Remove-Item "C:\Temp\api.zip"
-        'API files deleted!'
-    }
 
-    if(Test-Path "C:\Temp\MSShift.DevicesAPI.Setup.NEW.msi"){
-         Remove-Item "C:\Temp\MSShift.DevicesAPI.Setup.NEW.msi"
-    }
+    Get-ChildItem "C:\Temp\" -Recurse | Remove-Item -Force -Verbose
 
-    if(Test-Path "C:\Temp\adobe.exe"){
-         Remove-Item "C:\Temp\adobe.exe"
-         'Adobe files removed!'
-    }
-
-    if(Test-Path "C:\Temp\sigplus_.exe"){
-         Remove-Item "C:\Temp\sigplus_.exe"
-         'Signature Pads files removed!'
-    }
-
-    if(Test-Path "C:\Temp\Zebra_CoreScanner_Driver.exe"){
-         Remove-Item "C:\Temp\Zebra_CoreScanner_Driver.exe"
-         'Scanner files removed!'
-    }
-
-    if(Test-Path "C:\Temp\Restore Default.pdf"){
-         Remove-Item "C:\Temp\Restore Default.pdf"
-         'PDFs Removed!'
-    }
-
-    if(Test-Path "C:\Temp\ScanX_Config_Codebar.pdf"){
-         Remove-Item "C:\Temp\ScanX_Config_Codebar.pdf"
-    }
-
-    if(Test-Path "C:\Temp\Zebra123_CoreScanner_Driver.exe" ){
-         Remove-Item "C:\Temp\Zebra123_CoreScanner_Driver.exe"
-         'Scanner files removed!'
-    }
-
-    if(Test-Path "C:\Temp\Primera.2.3.1.exe"){
-         Remove-Item "C:\Temp\Primera.2.3.1.exe"  
-         'LX 500 files removed!'
-    }
-
-    if(Test-Path "C:\Temp\DCDSetup1.4.5.1.exe"){
-         Remove-Item "C:\Temp\DCDSetup1.4.5.1.exe"
-         'DYMO files removed!'  
-    }
-
-    
-    if(Test-Path "C:\Temp\DCDSetup1.3.2.18.exe"){
-         Remove-Item "C:\Temp\DCDSetup1.3.2.18.exe"  
-         'DYMO files removed!'
-    }
-                
-    if(Test-Path "C:\Temp\zd51.exe"){
-         Remove-Item "C:\Temp\zd51.exe"  
-         'ZD files removed!'
-    }
-
-    if(Test-Path "C:\Temp\zd.exe"){
-         Remove-Item "C:\Temp\zd.exe"  
-         'ZD files removed!'
-    }
-
-    if(Test-Path "C:\Temp\zd105.exe"){
-         Remove-Item "C:\Temp\zd105.exe" 
-         'ZD files removed!' 
-    }
-    if(Test-Path "C:\Temp\ZXP73.0.2.exe"){
-         Remove-Item "C:\Temp\ZXP73.0.2.exe"  
-         'ZXP-7 files removed!'
-    }
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 94%"
     'Temp folder cleaned!'
 }
 if($editSignature -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 100%"
+    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 96%"
     # Make sure that the new signature is created as their FIRST name.
     # Get new user's first name, last name
     $newFirst = Read-Host "New User's first name"
@@ -692,6 +634,180 @@ if($editSignature -eq $true){
     
     'New line written and saved!'    
 }
+
+if($successBookmarks -eq $true){
+
+    $csBookContent = @"
+{
+   "checksum": "5038894737ee701db294d22481f6e742",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13381607809000000",
+            "date_last_used": "0",
+            "guid": "de519d2b-c902-42ea-ae91-f272c8ce54d0",
+            "id": "26",
+            "name": "Hilton Demo",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://msshift-hw.com/default?sk=CdFALM8WDxusEst3Cn38DA%3D%3D",
+            "visit_count": 0
+         }, {
+            "date_added": "13381607837000000",
+            "date_last_used": "0",
+            "guid": "f48c3c1e-3cf0-42ea-b080-c52a576112f3",
+            "id": "27",
+            "name": "MS Info",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://msshift.info/Account/login?ReturnUrl=%2F",
+            "visit_count": 0
+         }, {
+            "date_added": "13381607856000000",
+            "date_last_used": "0",
+            "guid": "c01381ab-d218-4342-b354-ea6162953f17",
+            "id": "28",
+            "name": "Sec 2 Demo",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://msshift-security-2.com/default?sk=ZQIwnU5zh0W46StJCAxvNg%3D%3D",
+            "visit_count": 0
+         }, {
+            "date_added": "13381607871000000",
+            "date_last_used": "0",
+            "guid": "acaa35f1-f5dc-47d1-a07b-4594aa410d55",
+            "id": "29",
+            "name": "RingCentral",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://app.ringcentral.com/login",
+            "visit_count": 0
+         }, {
+            "date_added": "13381607891000000",
+            "date_last_used": "0",
+            "guid": "69ff0fc3-2a82-4a62-84f3-649070403248",
+            "id": "30",
+            "name": "Ring Central Analytics",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://analytics.ringcentral.com/",
+            "visit_count": 0
+         }, {
+            "date_added": "13381607934000000",
+            "date_last_used": "0",
+            "guid": "58ca4233-5053-4538-a8ca-cf64d9ada725",
+            "id": "31",
+            "name": "Dropbox",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://app.hellosign.com/account/logIn",
+            "visit_count": 0
+         }, {
+            "date_added": "13381607976000000",
+            "date_last_used": "0",
+            "guid": "952b1a49-e0c1-4d84-a8e4-53198171b759",
+            "id": "32",
+            "name": "Confluence",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://ms-shift.atlassian.net/wiki/home",
+            "visit_count": 0
+         }, {
+            "date_added": "13381608018000000",
+            "date_last_used": "0",
+            "guid": "cd43984d-bc65-4361-bab9-f81db6f5250e",
+            "id": "33",
+            "name": "ADP",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://online.adp.com/signin/v1/?APPID=WFNPortal&productId=80e309c3-7085-bae1-e053-3505430b5495&returnURL=https://workforcenow.adp.com/&callingAppId=WFN&TARGET=-SM-https://workforcenow.adp.com/theme/unified.html",
+            "visit_count": 0
+         }, {
+            "date_added": "13381608067000000",
+            "date_last_used": "0",
+            "guid": "64ea04c7-4806-434a-8211-7b7cff275199",
+            "id": "34",
+            "name": "FedEx Shipping Rates ",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://www.fedex.com/en-us/online/rating.html#",
+            "visit_count": 0
+         }, {
+            "date_added": "13381608108000000",
+            "date_last_used": "0",
+            "guid": "d4a40031-8b61-4f42-b263-f8890e53ec56",
+            "id": "35",
+            "name": "Bookings",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://outlook.office.com/bookings/homepage",
+            "visit_count": 0
+         }, {
+            "date_added": "13381608131000000",
+            "date_last_used": "0",
+            "guid": "72397612-22a5-4a11-92b6-9698f3aa0acf",
+            "id": "36",
+            "name": "Forms",
+            "show_icon": false,
+            "source": "import_fre",
+            "type": "url",
+            "url": "https://forms.office.com/Pages/DesignPageV2.aspx?subpage=creationv2",
+            "visit_count": 0
+         } ],
+         "date_added": "13372174174772540",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Favorites bar",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13372174174772550",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other favorites",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13372174174772551",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile favorites",
+         "source": "unknown",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}
+
+"@
+
+    $EdgeProfilePath = Join-Path $env:USERPROFILE "AppData\Local\Microsoft\Edge\User Data\Default"
+    $csBookmarksFilePath = Join-Path $EdgeProfilePath "Bookmarks"
+    $csBookContent | Out-File -FilePath $csBookmarksFilePath -Encoding ascii -Force
+    'Bookmarks Updated...'
+
+}
+
 $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 100%"
 'Script Finished. Goodbye!'
 Start-Sleep -Seconds 3
