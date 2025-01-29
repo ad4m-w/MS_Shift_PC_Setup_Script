@@ -1,5 +1,5 @@
 # Created By Adam Waszczyszak
-# Version 1.5
+# Version 1.6
 # Lightweight, simple version of the setup script to enable compatiblity on all systems
 
 $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak"
@@ -60,6 +60,7 @@ function Show-Menu {
     Write-Host "17. Edit Email Signature"
     Write-Host "18. Success Bookmarks"
     Write-Host "19. Full Package"
+    Write-Host "20. CS Default Packages"
     Write-Host "Q. Execute selection and Quit"
 }
 
@@ -85,6 +86,7 @@ $deleteTemp = $false
 $editSignature = $false
 $fullPackage = $false
 $successBookmarks = $false
+$csDefault = $false
 
 do {
 
@@ -290,7 +292,16 @@ do {
                 Write-Host "Full Package  Disabled"                
             }
         }
-
+        "20" {
+            if($csDefault -eq $false){
+                $csDefault = $true
+                Write-Host "CS Default Package  Enabled"                
+            }
+            elseif($csDefault -eq $true){
+                $csDefault = $false
+                Write-Host "CS Default Package  Disabled"                
+            }
+        }
         "Q" {
             Write-Host "Executing Selected Choices..."
             break
@@ -322,11 +333,26 @@ if($fullPackage -eq $true){
     $editSignature = $true
     $successBookmarks =$true
 }
+if($csDefault -eq $true){
+    $windowsUpdate = $true
+    $createFolders = $true
+    $msedgePatch = $true
+    $silentAPI = $true
+    $silentAdobe = $true
+    $silentScanner = $true
+    $silentDymo = $true
+    $signaturepad = $true
+    $zxp = $true
+    $blockDymo = $true
+    $blockAdobe = $true
+    $blockWindows = $true
+    $deleteTemp = $true
+    $successBookmarks =$true
+}
 
 if($windowsUpdate -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 5.88%"
     'Installing Windows Update PS Module...'
-    Install-Module -Name NuGet -Force
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
     Install-Module -Name PSWindowsUpdate -Force
     'Installing all newest Windows Updates'
     Import-Module -Name PSWindowsUpdate -Force
@@ -334,7 +360,6 @@ if($windowsUpdate -eq $true){
     'Done, remember to restart later!'
 }
 if($createFolders -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 11.76%"
     if (Test-Path -Path C:\Temp){
         "Temp Folder Already Exists"
         }
@@ -367,7 +392,6 @@ if($createFolders -eq $true){
         "Permissions for Temp and Visitor_Pics Set!"
 }
 if($msedgePatch -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 17.64%"
     $regContent = @"
     Windows Registry Editor Version 5.00
     ;Disable IE11 Welcome Screen
@@ -387,7 +411,6 @@ if($msedgePatch -eq $true){
     Remove-Item $tempFile.FullName  
 }
 if($silentAPI -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 23.52%"
     'Parsing download site for API Download Link...'     
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/e2d06108-8cc8-4705-a316-54463dc1d78f"
@@ -404,7 +427,6 @@ if($silentAPI -eq $true){
     Read-Host -Prompt "Press any key to continue..."
 }
 if($silentAdobe -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 29.4%"
     'Parsing download site for Adobe Installer...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/5da99203-21ba-4aa2-93e6-a60a8a0b3ae3"
@@ -419,7 +441,6 @@ if($silentAdobe -eq $true){
     Read-Host -Prompt "Press any key to continue..."    
 }
 if($silentScanner -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 35.28%"
     'Parsing download site for DS8108 driver...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/c862d6fc-fc72-4e77-8347-ab079c8d4fa3"
@@ -486,7 +507,6 @@ bOpt2=0
    Read-Host -Prompt "CMD launched with Zebra Installer and arguments. Press any key to continue..." 
 }
 if($signaturepad -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 41.16%"
     'Parsing download site for Signature Pad driver...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/e43d957b-0b20-4422-a3d0-a114162c5dfe"
@@ -501,7 +521,6 @@ if($signaturepad -eq $true){
     Read-Host -Prompt "Press any key to continue..." 
 }
 if($lx500 -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 47.04%"
     'Parsing download site for LX-500 driver...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/7ebdd547-4c3c-4dc4-8639-e0ce88c1f60c"
@@ -516,7 +535,6 @@ if($lx500 -eq $true){
     Read-Host -Prompt "Press any key to continue..."
 }
 if($gk420d -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 52.92%"
     'Parsing download site for GK 420d driver...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/2923c379-b7a0-4506-9c28-4ea5b2c0e48c"
@@ -531,7 +549,6 @@ if($gk420d -eq $true){
     Read-Host -Prompt "Press any key to continue..."
 }
 if($zd421 -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 58.8%"
     'Parsing download site for ZD421 driver...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/75b8f783-51f0-4a8a-9128-bf6957480aa4"
@@ -546,7 +563,6 @@ if($zd421 -eq $true){
     Read-Host -Prompt "Press any key to continue..."
 }
 if($zxp -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 64.68%"
     'Parsing download site for ZXP-7...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/7cc7f865-5107-4f8b-9f3e-617b8ca23802"
@@ -561,7 +577,6 @@ if($zxp -eq $true){
     Read-Host -Prompt "Press any key to continue..."
 }
 if($silentDymo -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 70.56%"
     'Parsing download site for DYMO 550 driver...'
     # Retrieve the HTML content of the website
     $response = Invoke-WebRequest -Uri "https://download.msshift.com/link/1ab37806-4228-4eb1-8178-1ba492b0ea0f"
@@ -576,18 +591,15 @@ if($silentDymo -eq $true){
     Read-Host -Prompt "Press any key to continue..."
 }
 if($blockDymo -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 76.44%"
     'Blocking services...'
     New-NetFirewallRule -Program "C:\Program Files (x86)\DYMO\DYMO Connect\DYMOConnect.exe" -Action Block -Profile Domain, Private, Public -DisplayName “Block DYMO Connect” -Description “Block DYMO Connect” -Direction Outbound | Format-Table -AutoSize -Property DisplayName, Enabled, Direction, Action  
     New-NetFirewallRule -Program "C:\Program Files (x86)\DYMO\DYMO Connect\DYMO.WebApi.Win.Host.exe" -Action Block -Profile Domain, Private, Public -DisplayName “Block DYMO WebService” -Description “Block DYMO WebService” -Direction Outbound | Format-Table -AutoSize -Property DisplayName, Enabled, Direction, Action 
 }
 if($blockAdobe -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 82.32%"
     Set-Service -Name "AdobeARMservice" -StartupType Disabled
     "Adobe Update Services Blocked In Services.msc"
 }
 if($blockWindows -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 88.2%" 
     sc.exe query wuauserv
     sc.exe stop wuauserv
     sc.exe config wuauserv start=disabled
@@ -597,7 +609,6 @@ if($blockWindows -eq $true){
     Get-ScheduledTask -TaskPath '\Microsoft\Windows\WindowsUpdate\'  | Disable-ScheduledTask -ErrorAction SilentlyContinue
 }
 if($deleteTemp -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 94.08%"
     'Removing all drivers from Temp Folder...'
 
     Get-ChildItem "C:\Temp\" -Recurse | Remove-Item -Force -Verbose
@@ -605,7 +616,6 @@ if($deleteTemp -eq $true){
     'Temp folder cleaned!'
 }
 if($editSignature -eq $true){
-    $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 96%"
     # Make sure that the new signature is created as their FIRST name.
     # Get new user's first name, last name
     $newFirst = Read-Host "New User's first name"
@@ -808,7 +818,6 @@ if($successBookmarks -eq $true){
 
 }
 
-$host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak. Progress: 100%"
 'Script Finished. Goodbye!'
 Start-Sleep -Seconds 3
 [System.Environment]::Exit(1)
