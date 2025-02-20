@@ -1,5 +1,5 @@
 # Created By Adam Waszczyszak
-# Version 1.6
+# Version 1.7
 # Lightweight, simple version of the setup script to enable compatiblity on all systems
 
 $host.ui.RawUI.WindowTitle = "Litetouch setup for new PC's by Adam Waszczyszak"
@@ -596,7 +596,10 @@ if($blockDymo -eq $true){
     New-NetFirewallRule -Program "C:\Program Files (x86)\DYMO\DYMO Connect\DYMO.WebApi.Win.Host.exe" -Action Block -Profile Domain, Private, Public -DisplayName “Block DYMO WebService” -Description “Block DYMO WebService” -Direction Outbound | Format-Table -AutoSize -Property DisplayName, Enabled, Direction, Action 
 }
 if($blockAdobe -eq $true){
+
+    sc.exe stop AdobeARMservice
     Set-Service -Name "AdobeARMservice" -StartupType Disabled
+
     "Adobe Update Services Blocked In Services.msc"
 }
 if($blockWindows -eq $true){
